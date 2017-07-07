@@ -1,0 +1,16 @@
+name: ChatActions
+main: me.bumblebeee_.chatactions.ChatActions
+version: 1.0
+author: BumbleBeee_
+description: Chat Actions Plugin
+depend: [WorldGuard, Kingdoms]
+commands:
+  chatactions:
+    description: Main command
+    aliases: [ca]
+  vedigiocata:
+    description: Get your saved logs
+  salvagiocata:
+    description: Start saving logs
+  stopgiocata:
+    description: Stop saving logs
