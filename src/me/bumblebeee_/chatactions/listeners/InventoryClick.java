@@ -55,6 +55,9 @@ public class InventoryClick implements Listener {
                 ItemStack book = e.getCurrentItem();
                 BookMeta bm = (BookMeta) book.getItemMeta();
                 List<String> lore = bm.getLore();
+                if (!(lore.size() > 0))
+                    return;
+
                 if (!lore.get(0).contains("ID")) {
                     p.sendMessage(ChatColor.RED + "An internal error has occurred!");
                     return;

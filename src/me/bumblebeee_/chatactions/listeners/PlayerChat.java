@@ -70,21 +70,21 @@ public class PlayerChat implements Listener {
             }
         }
 
-        List<Player> recieved = new ArrayList<>();
+        List<UUID> recieved = new ArrayList<>();
         if (radius == 0) {
             for (Player t : Bukkit.getServer().getOnlinePlayers()) {
                 t.sendMessage(send);
-                recieved.add(t);
+                recieved.add(t.getUniqueId());
             }
         } else {
             for (Entity en : p.getNearbyEntities(radius, radius, radius)) {
                 if (!(en instanceof Player))
                     continue;
                 en.sendMessage(send);
-                recieved.add((Player) en);
+                recieved.add(((Player) en).getUniqueId());
             }
             p.sendMessage(send);
-            recieved.add(p);
+            recieved.add(p.getUniqueId());
         }
         Bukkit.getServer().getLogger().info(StringUtils.prependIfMissing(consoleMsg, "[" + ch + "] "));
 
@@ -97,13 +97,13 @@ public class PlayerChat implements Listener {
                 continue;
 
             t.sendMessage(spyMsg);
-            recieved.add(t);
+            recieved.add(t.getUniqueId());
         }
 
         //Logging
-        if (logs.getLogging().contains(p.getUniqueId())) {
-            for (Player add : recieved) {
-                logs.writeToFile(add.getUniqueId(), send);
+        for (UUID uuid : logs.getLogging()) {
+            if (recieved.contains(uuid)) {
+                logs.writeToFile(uuid, send);
             }
         }
 
