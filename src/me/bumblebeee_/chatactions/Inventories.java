@@ -76,6 +76,9 @@ public class Inventories {
 
             List<String> lore = new ArrayList<>(Collections.singletonList(ChatColor.translateAlternateColorCodes('&', "&7ID: " + id)));
             ItemStack i = logs.getLogItem(p, id);
+            if (i == null)
+                continue;
+
             ItemMeta im = i.getItemMeta();
             im.setLore(lore);
             i.setItemMeta(im);

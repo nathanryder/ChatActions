@@ -11,7 +11,6 @@ public class PlayerQuit implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
-//        logs.deleteLog(e.getPlayer().getUniqueId());
         logs.stopLogging(e.getPlayer().getUniqueId());
     }
 

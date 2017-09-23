@@ -32,7 +32,6 @@ public class LogManager {
 
         File f = new File(ChatActions.getInstance().getDataFolder() + File.separator + "data" + File.separator + uuid + ".yml");
         if (!f.exists()) {
-            System.out.println("1");
             try {
                 f.createNewFile();
             } catch (IOException e) {
@@ -47,7 +46,6 @@ public class LogManager {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("2");
             YamlConfiguration c = YamlConfiguration.loadConfiguration(f);
             int next = c.getInt("selected")+1;
             int max = ChatActions.getInstance().getConfig().getInt("amountOfLogs");
@@ -68,15 +66,12 @@ public class LogManager {
                     }
                     c.set("dates." + newid, dates.get(id));
                     c.set("logs." + newid, data.get(id));
-                    //TODO update date
                     newid++;
                 }
-                System.out.println("3");
             } else {
                 if (c.getConfigurationSection("logs") != null) {
                     c.set("dates." + next, getTime("dd/MM/yyyy"));
                     c.set("selected", next);
-                    System.out.println("4");
                 }
             }
 
@@ -91,11 +86,14 @@ public class LogManager {
 
     public ItemStack getLogItem(Player p, String logID) {
         List<String> logged = getLogs(p.getUniqueId(), logID);
-        String title = "Giocata: " + getDate(p.getUniqueId(), logID) + " - " + getFirstTime(p.getUniqueId(), logID);
+        String firstTime = getFirstTime(p.getUniqueId(), logID);
+        if (firstTime == null)
+            return null;
+
+        String title = "Giocata: " + getDate(p.getUniqueId(), logID) + " - " + firstTime;
         String pageData = "";
 
         NBTTagList pages = new NBTTagList();
-        String firstTime = getFirstTime(p.getUniqueId(), logID);
         String lastTime = getLastTime(p.getUniqueId(), logID);
         String kingdom = getKingdom(p.getUniqueId(), logID);
         String region = getRegion(p.getUniqueId(), logID);
@@ -149,7 +147,13 @@ public class LogManager {
 
     public String getFirstTime(UUID uuid, String logID) {
         List<String> logs = getLogs(uuid, logID);
-        return logs.get(0).split("\\|")[0];
+        if (logs == null || logs.size() == 0)
+            return null;
+        String[] data = logs.get(0).split("\\|");
+        if (data[0] == null)
+            return null;
+
+        return data[0];
     }
 
     public String getLastTime(UUID uuid, String logID) {
