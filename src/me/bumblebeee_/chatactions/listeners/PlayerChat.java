@@ -70,11 +70,21 @@ public class PlayerChat implements Listener {
             }
         }
 
+        //Actual message sending
         List<UUID> recieved = new ArrayList<>();
         if (radius == 0) {
             for (Player t : Bukkit.getServer().getOnlinePlayers()) {
-                t.sendMessage(send);
-                recieved.add(t.getUniqueId());
+                if (p.hasPermission("chatactions.arcane")) {
+                    if (t.hasPermission("chatactions.arcane") || t.hasPermission("chatactions.arcane.bypass")) {
+                        t.sendMessage(send);
+                        recieved.add(t.getUniqueId());
+                    } else {
+                        t.sendMessage(send.replace(" ", " " + ChatColor.MAGIC));
+                    }
+                } else {
+                    t.sendMessage(send);
+                    recieved.add(t.getUniqueId());
+                }
             }
         } else {
             for (Entity en : p.getNearbyEntities(radius, radius, radius)) {
